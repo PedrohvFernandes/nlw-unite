@@ -1,0 +1,11 @@
+# Metodo http - Url - Recurso
+POST http://localhost:3000/events
+# Cabeçalho
+Content-Type: application/json
+
+# Request body
+{
+  "title": "Unite Summit",
+  "details": "Um evento para reunir a comunidade de desenvolvedores",
+  "maximumAttendees": 100
+}

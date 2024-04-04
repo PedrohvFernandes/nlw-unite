@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id               String  @id @default(uuid())
+  title            String
+  // Se quiser pode colocar uma descrição
+  details          String?
+  // O slug nada mais é que o nome do titulo so que todo formatado  para ficar bonito como um URL amigavel. Ex: Title do evento: Nlw Unite, Slug: nlw-unite. E isso evita de usarmos o ID que esta em uuid na url para achar o evento, ex: http://localhost:3000/events/nlw-unit, com uuid: http://localhost:3000/events/2ed30af4-9151-47b7-a99e-19e6e847b9ba
+  slug             String  @unique
+  // Se quiser pode colocar um maximo de pessoas no evento
+  maximumAttendees Int?    @map("maximum_attendees")
+
+// dois @@ é renomeação  do nome da tabela(model) e um @ é para renomear um campo
+  @@map("events")
+}

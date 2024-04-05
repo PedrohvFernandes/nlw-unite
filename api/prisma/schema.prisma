@@ -40,5 +40,7 @@ model Attendee {
   // Um relacionamente de Um  para muitos com o model Event.
   event Event @relation(fields: [eventId], references: [id])
 
+// Dentro da tabela de participantes eu so posso ter a combinação de um email dentro de um evento unico, eu nunca vou poder ter o mesmo email duas vezes ou mais vezes no mesmo evento
+  @@unique([eventId, email])
   @@map("attendees")
 }

@@ -1,4 +1,4 @@
-import { createEvent } from './routes'
+import { createEvent, registerForEvent } from './routes'
 
 // Para conseguir tipar as rotas por inteiro
 import {
@@ -14,6 +14,7 @@ app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
 app.register(createEvent)
+app.register(registerForEvent)
 
 app
   .listen({

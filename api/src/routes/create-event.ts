@@ -38,6 +38,7 @@ export async function createEvent(app: FastifyInstance) {
       // O parse faz a validação dos dados
       // const { details, maximumAttendees, title } = createEventSchema.parse(request.body)
 
+      // Agora pegamos os dados do body da requisição definidos no schema
       const { details, maximumAttendees, title } = request.body
 
       const slug = generateSlug(title)
@@ -62,6 +63,7 @@ export async function createEvent(app: FastifyInstance) {
       })
 
       // return { eventId: event.id }
+      // Tem que respeitar agora o schema de resposta definido la em cima
       return reply.status(201).send({ eventId: event.id })
     }
   )

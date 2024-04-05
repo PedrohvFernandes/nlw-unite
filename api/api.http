@@ -5,7 +5,17 @@ Content-Type: application/json
 
 # Request body
 {
-  "title": "Unite Summit",
-  "details": "Um evento para reunir a comunidade de desenvolvedores",
-  "maximumAttendees": 100
+  "title": "Novo evento",
+  "details": null,
+  "maximumAttendees": 1
+}
+
+###
+
+POST http://localhost:3000/events/fb94b857-fcdb-40ef-bed7-bf291c7f843b/attendees
+Content-Type: application/json
+
+{
+  "name": "João da Silva",
+  "email": "joao3@silva.com"
 }

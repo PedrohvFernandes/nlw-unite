@@ -19,3 +19,8 @@ Content-Type: application/json
   "name": "João da Silva",
   "email": "joao3@silva.com"
 }
+
+###
+
+GET http://localhost:3000/events/fb94b857-fcdb-40ef-bed7-bf291c7f843b
+

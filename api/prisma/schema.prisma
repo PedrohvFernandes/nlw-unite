@@ -28,7 +28,7 @@ model Event {
 }
 
 model Attendee {
-  // Usamos o id incremental porque como cada participante é um ingresso novo, então não teria porque fazer um id uuid para ele e um outro id separado autoincremental para ser o id do ingresso. Então usamos o mesmo id tanto para achar tal participante, quanto para ser como o id do ingresso. Pk
+  // Usamos o id incremental porque como cada participante é um ingresso novo, então não teria porque fazer um id uuid para ele e um outro id separado autoincremental para ser o id do ingresso. Então usamos o mesmo id tanto para achar tal participante, quanto para ser como o id do ingresso. Pk. Mas caso queira fazer um id publico, seguro e menor que o UUID para facilitar o usuario na hora de pesquisar suas credenciais, é usar o https://github.com/ai/nanoid, no momento da criação do participante voce criar o id publico na rota register-for-event e usa o id  para pesquisar pelo o usuario na rota get-attendee-badge, em vez de usar o id incremental que é facilmente pesquisavel por qualquer pessoa
   id        Int      @id @default(autoincrement())
   name      String
   email     String

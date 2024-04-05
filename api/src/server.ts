@@ -1,4 +1,9 @@
-import { createEvent, getEvent, registerForEvent } from './routes'
+import {
+  createEvent,
+  getAttendeeBadge,
+  getEvent,
+  registerForEvent
+} from './routes'
 
 // Para conseguir tipar as rotas por inteiro
 import {
@@ -16,6 +21,7 @@ app.setSerializerCompiler(serializerCompiler)
 app.register(createEvent)
 app.register(registerForEvent)
 app.register(getEvent)
+app.register(getAttendeeBadge)
 
 app
   .listen({

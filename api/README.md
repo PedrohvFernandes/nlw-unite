@@ -127,8 +127,20 @@ npm install dotenv
   -  Migrations --> Controle de versão do banco de dados --> Criação de tabelas, alteração de tabelas, exclusão de tabelas...
 
 - Http status code: Traz o significado da resposta
-  -  1xx: Informação
   -  2xx: Sucesso
   -  3xx: Redirecionamento
-  -  4xx: Erro do cliente
-  -  5xx: Erro do servidor
+  -  4xx: Erro do cliente(Erro em alguma informação enviada por QUEM esta fazendo a chamada p/ API)
+  -  5xx: Erro do servidor(Um erro que está acontecendo IDEPENDENTE do que está sendo enviado p/ o servidor)
+
+- Caso queira gerar regex de maneira facil, basta usar o Chatgpt:
+  -  Me dê uma função em typescript que gere um slug a partir de um texto sem acentos, símbolos ou espaços, ou seja, pronto para ser usado em uma URL
+  ```bash
+      export function generateSlug(text: string): string {
+      return text
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+    }
+  ```

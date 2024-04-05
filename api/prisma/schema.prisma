@@ -11,15 +11,34 @@ datasource db {
 }
 
 model Event {
-  id               String  @id @default(uuid())
+  // O id poderia ser autoincrement em number, mas por questões de segurança usamos o uuid para o id principal privado, e caso quisesse poderiamos fazer um id publico autoincremental para facilitar na busca de um evento nas tabelas. Pk
+  id               String     @id @default(uuid())
   title            String
   // Se quiser pode colocar uma descrição
   details          String?
   // O slug nada mais é que o nome do titulo so que todo formatado  para ficar bonito como um URL amigavel. Ex: Title do evento: Nlw Unite, Slug: nlw-unite. E isso evita de usarmos o ID que esta em uuid na url para achar o evento, ex: http://localhost:3000/events/nlw-unit, com uuid: http://localhost:3000/events/2ed30af4-9151-47b7-a99e-19e6e847b9ba
-  slug             String  @unique
+  slug             String     @unique
   // Se quiser pode colocar um maximo de pessoas no evento
-  maximumAttendees Int?    @map("maximum_attendees")
+  maximumAttendees Int?       @map("maximum_attendees")
+  // O mesmo event pode esta relacioando a varios participantes. Isso aqui não quer dizer que vai ter uma nova coluna no nosso banco de dados, isso é so para prisma saber que existe esse relacionamento, facilitando de fazer os join entre essas duas tabelas Event(Um) ---- (Muitos)Attendee
+  attendees        Attendee[]
 
-// dois @@ é renomeação  do nome da tabela(model) e um @ é para renomear um campo
+  // dois @@ é renomeação  do nome da tabela(model) e um @ é para renomear um campo
   @@map("events")
+}
+
+model Attendee {
+  // Usamos o id incremental porque como cada participante é um ingresso novo, então não teria porque fazer um id uuid para ele e um outro id separado autoincremental para ser o id do ingresso. Então usamos o mesmo id tanto para achar tal participante, quanto para ser como o id do ingresso. Pk
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  createdAt DateTime @default(now()) @map("created_at")
+  // Id do evento que aquele participanete esta precisa ser string porque o id do Event é uma string
+  // Essa coluna nessa tabela se diferencia das demais, porque essa é a FK, onde indica em qual evento aquele participante esta
+  eventId   String   @map("event_id")
+
+  // Um relacionamente de Um  para muitos com o model Event.
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@map("attendees")
 }

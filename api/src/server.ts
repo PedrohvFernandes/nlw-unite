@@ -15,12 +15,18 @@ import {
   jsonSchemaTransform
 } from 'fastify-type-provider-zod'
 
+// Segurança da Api
+import fastifyCors from '@fastify/cors'
 // Documentação
 import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 import fastify from 'fastify'
 
 const app = fastify()
+
+app.register(fastifyCors, {
+  origin: '*' // http://meufrontend.com em produção
+})
 
 app.register(fastifySwagger, {
   swagger: {
@@ -62,7 +68,9 @@ app.setErrorHandler(errorHandler)
 
 app
   .listen({
-    port: 3000
+    port: 3000,
+    // Para conseguir acessar a api por exemplo no react-native
+    host: '0.0.0.0'
   })
   .then(() => {
     console.log('Server is running on port 3000')

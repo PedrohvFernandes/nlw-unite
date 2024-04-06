@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --env-file .env src/server.ts",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "build:esm": "tsup src --format esm",
+    "build:cjs": "tsup src --format cjs",
+    "start": "node dist/server.mjs",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -18,6 +23,7 @@
     "@types/node": "^20.12.4",
     "eslint": "^8.57.0",
     "prisma": "^5.12.1",
+    "tsup": "^8.0.2",
     "tsx": "^4.7.2",
     "typescript": "^5.4.3"
   },

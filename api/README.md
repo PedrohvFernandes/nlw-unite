@@ -84,9 +84,13 @@ CREATE UNIQUE INDEX "check_ins_attendeeId_key" ON "check_ins"("attendeeId");
 ```bash
 npx prisma init --datasource-provider SQLite
 
-npx prisma migrate dev
+npx prisma migrate dev 
+# ou
+npm run db:migrate
 
 npx prisma studio
+# ou
+npm run db:studio
 ```
 
 ### Comando do node para ler .env(Variaveis de ambiente)
@@ -100,8 +104,6 @@ npm install dotenv
   "scripts": {
     "dev": "tsx watch --env-file .env src/server.ts"
   }
-
-
 ```
 
 ### Anotações:
@@ -160,3 +162,22 @@ depois rode o comando para popular o banco:
   npm i @fastify/swagger @fastify/swagger-ui
 ```
 - Para abrir e testar a documentação da API, basta acessar a rota /docs: http://localhost:3000/docs
+- Fazendo o build para subir a aplicação para produção
+```bash
+  npm i tsup -D
+```
+- Script de build para preparar nossa aplicação para produção
+```bash
+  "scripts": {
+    # Para gerar o build no formato ESM (EcmaScript Module) de exportação e importação diretamente das funções, classes, variáveis, arquivos...
+    "build:esm": "tsup src --format esm",
+    # Para gerar o build no formato CommonJS padrão antigo de exportação e importação, module export
+    "build:cjs": "tsup src --format cjs",
+  }
+```
+- Para rodar o build: `npm run start`, ou seja, a plicação em JS
+```bash
+  "scripts": {
+    "start": "node dist/server.mjs"
+  }
+```

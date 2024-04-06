@@ -1,4 +1,4 @@
-// Essa rota retorna as credenciais do cracha de um participante
+// Essa rota retorna as credenciais para o cracha de um participante, faz e retorna tambem a url em formato de URL para o check-in do participante com o seu id. A parte do cracha fica no APP do participante, e a url vira um QRCODE no app para se escaneado
 
 import { prisma } from '../lib'
 
@@ -18,7 +18,16 @@ export async function getAttendeeBadge(app: FastifyInstance) {
           // o coerce converte, pode ser que o valor seja uma string, mas ele vai tentar converter para number
           attendeeId: z.coerce.number().int()
         }),
-        response: {}
+        response: {
+          200: z.object({
+            badge: z.object({
+              name: z.string(),
+              email: z.string(),
+              eventTitle: z.string(),
+              checkInURL: z.string().url()
+            })
+          })
+        }
       }
     },
     async (request, reply) => {
@@ -44,8 +53,20 @@ export async function getAttendeeBadge(app: FastifyInstance) {
         throw new Error('Attendee not found')
       }
 
+      // Pegamos a url do back-end --> http://localhost:3000
+      const baseURL = `${request.protocol}://${request.hostname}`
+
+      // O primeiro parametro é o path que é o que vem depois da URL base, ou seja, uma rota, o segundo é a url base o dominio em si. Então estamos ditando a url do qrcode(APP DO PARTICIPANTE) que vai ser gerado para ele fazer o check-in --> /attendees/:attendeeId/check-in --> check-in.ts
+      const checkInURL = new URL(`/attendees/${attendeeId}/check-in`, baseURL)
+
       return reply.send({
-        attendee
+        badge: {
+          name: attendee.name,
+          email: attendee.email,
+          eventTitle: attendee.event.title,
+          // Colocamos toString() porque o checkInURL é um objeto que vem da classe URL
+          checkInURL: checkInURL.toString()
+        }
       })
     }
   )

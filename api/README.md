@@ -144,3 +144,15 @@ npm install dotenv
         .replace(/\s+/g, '-')
     }
   ```
+- Arquivo para pre-popular nosso BD, o arquivo *seed* em prisma
+- Em package.json:
+```bash
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+```
+depois rode o comando para popular o banco:
+```bash
+  npx prisma db seed
+```
+- Documentação da Api usando o Swagger: https://swagger.io/

@@ -1,7 +1,9 @@
 import {
+  checkIn,
   createEvent,
   getAttendeeBadge,
   getEvent,
+  getEventAttendees,
   registerForEvent
 } from './routes'
 
@@ -22,6 +24,8 @@ app.register(createEvent)
 app.register(registerForEvent)
 app.register(getEvent)
 app.register(getAttendeeBadge)
+app.register(checkIn)
+app.register(getEventAttendees)
 
 app
   .listen({

@@ -1,6 +1,7 @@
 // Essa rota retorna as credenciais para o cracha de um participante, faz e retorna tambem a url em formato de URL para o check-in do participante com o seu id. A parte do cracha fica no APP do participante, e a url vira um QRCODE no app para se escaneado
 
 import { prisma } from '../lib'
+import { BadRequest } from './_errors/bad-request'
 
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
@@ -52,7 +53,8 @@ export async function getAttendeeBadge(app: FastifyInstance) {
       })
 
       if (attendee === null) {
-        throw new Error('Attendee not found')
+        // throw new Error('Attendee not found')
+        throw new BadRequest('Attendee not found')
       }
 
       // Pegamos a url do back-end --> http://localhost:3000

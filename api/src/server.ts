@@ -1,3 +1,4 @@
+import { errorHandler } from './error-handler'
 import {
   checkIn,
   createEvent,
@@ -55,6 +56,9 @@ app.register(getEvent)
 app.register(getAttendeeBadge)
 app.register(checkIn)
 app.register(getEventAttendees)
+
+// Padronização do erro. Todo erro da aplicação das rotas vão cair dentro desse arquivo, levando a mensagem de erro para ele. Seja um erro de validação, um erro 400 ou um erro padrão...
+app.setErrorHandler(errorHandler)
 
 app
   .listen({

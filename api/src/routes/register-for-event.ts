@@ -1,4 +1,5 @@
 import { prisma } from '../lib'
+import { BadRequest } from './_errors/bad-request'
 
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
@@ -47,7 +48,8 @@ export async function registerForEvent(app: FastifyInstance) {
         })
 
         if (attendeeFromEmail !== null) {
-          throw new Error('Attendee already registered for this event')
+          // throw new Error('Attendee already registered for this event')
+          throw new BadRequest('Attendee already registered for this event')
         }
 
         // Essas duas queries agora irão executar ao mesmo tempo

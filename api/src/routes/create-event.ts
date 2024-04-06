@@ -1,5 +1,6 @@
 import { prisma } from '../lib'
 import { generateSlug } from '../utils/generate-slug'
+import { BadRequest } from './_errors/bad-request'
 
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
@@ -19,7 +20,14 @@ export async function createEvent(app: FastifyInstance) {
         tags: ['events Post'],
         // O que a rota vai receber no body da requisição
         body: z.object({
-          title: z.string().min(4),
+          title: z
+            .string({
+              // Mensagem de erro caso o titulo não seja uma string
+              invalid_type_error: 'O título precisa ser um texto'
+            })
+            .min(4, {
+              message: 'O título precisa ter no mínimo 4 caracteres'
+            }),
           details: z.string().nullable(),
           // Um numero, em inteiro, somente positivo e pode ser nulo
           maximumAttendees: z.number().int().positive().nullable()
@@ -55,7 +63,8 @@ export async function createEvent(app: FastifyInstance) {
       })
 
       if (eventWithSameSlug !== null) {
-        throw new Error('Event with same title already exists')
+        // throw new Error('Event with same title already exists')
+        throw new BadRequest('Event with same title already exists')
       }
 
       const event = await prisma.event.create({

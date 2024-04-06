@@ -1,6 +1,7 @@
 // Essa rota faz o checkin do participante, ela é chamada quando o participante escaneia o qrcode(URL retornada da rota get-attendee-badge junto com as demais credenciais) do seu cracha feito no APP
 
 import { prisma } from '../lib'
+import { BadRequest } from './_errors/bad-request'
 
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
 
@@ -34,7 +35,8 @@ export async function checkIn(app: FastifyInstance) {
       })
 
       if (!attendee) {
-        throw new Error('Attendee not found')
+        // throw new Error('Attendee not found')
+        throw new BadRequest('Attendee not found')
       }
 
       const attendeeCheckIn = await prisma.checkIn.findUnique({
@@ -45,7 +47,8 @@ export async function checkIn(app: FastifyInstance) {
 
       // Se dentro de checkin tiver o id daquele participante, significa que ele já fez o checkin
       if (attendeeCheckIn) {
-        throw new Error('Attendee already checked in')
+        // throw new Error('Attendee already checked in')
+        throw new BadRequest('Attendee already checked in')
       }
 
       // Criamos o checkin do participante passando somente o seu id, a data de criação o prorprio prisma já faz

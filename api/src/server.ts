@@ -10,12 +10,41 @@ import {
 // Para conseguir tipar as rotas por inteiro
 import {
   serializerCompiler,
-  validatorCompiler
+  validatorCompiler,
+  jsonSchemaTransform
 } from 'fastify-type-provider-zod'
 
+// Documentação
+import fastifySwagger from '@fastify/swagger'
+import fastifySwaggerUI from '@fastify/swagger-ui'
 import fastify from 'fastify'
 
 const app = fastify()
+
+app.register(fastifySwagger, {
+  swagger: {
+    // Todos os dados enviados para a minha api são do tipo JSON
+    consumes: ['application/json'],
+    // Todos os dados que a minha api retorna são do tipo JSON
+    produces: ['application/json'],
+    info: {
+      title: 'pass.in',
+      description:
+        'Especificações da API para o back-end da aplicação pass.in construida duranta o NLW Unite da Rocketseat',
+      version: '1.0.0'
+    }
+  },
+  // Como swagger deve transformar e entender os schemas(params, response, body...) passados para cada rota
+  transform: jsonSchemaTransform
+})
+
+app.register(fastifySwaggerUI, {
+  routePrefix: '/docs',
+  swagger: {
+    url: '/swagger.json'
+  },
+  exposeRoute: true
+})
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)

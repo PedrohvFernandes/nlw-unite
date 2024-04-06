@@ -12,6 +12,8 @@ export async function getAttendeeBadge(app: FastifyInstance) {
     '/attendees/:attendeeId/badge',
     {
       schema: {
+        summary: 'Get an attendee badge',
+        tags: ['attendees Get'],
         params: z.object({
           // O id do participante é um number no bd, mas quando passamos parametros via URL eles chegam como string
           // attendeeId: z.string().transform(Number)

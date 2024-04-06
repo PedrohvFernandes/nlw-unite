@@ -155,4 +155,8 @@ depois rode o comando para popular o banco:
 ```bash
   npx prisma db seed
 ```
-- Documentação da Api usando o Swagger: https://swagger.io/
+- Documentação da Api usando o Swagger: https://swagger.io/ e iremos usar o fastify junto com ele para gerar o arquivo de documentação yml ou json da API *fastify/swagger*, o *fastify/swagger-ui* cria a interface para visualizar/navegar pela documentação da API
+```bash 
+  npm i @fastify/swagger @fastify/swagger-ui
+```
+- Para abrir e testar a documentação da API, basta acessar a rota /docs: http://localhost:3000/docs

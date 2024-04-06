@@ -14,12 +14,17 @@ export async function createEvent(app: FastifyInstance) {
     {
       // Por arqui tipamos o body da requisição(O que ela vai receber) e a resposta(O que ela vai devolver) usando o zod, atraves do withTypeProvider<ZodTypeProvider>() fastify-type-provider-zod. Isso facilita na documentação da API
       schema: {
+        // Personaliza para a documentação do swagger
+        summary: 'Create a new event',
+        tags: ['events Post'],
+        // O que a rota vai receber no body da requisição
         body: z.object({
           title: z.string().min(4),
           details: z.string().nullable(),
           // Um numero, em inteiro, somente positivo e pode ser nulo
           maximumAttendees: z.number().int().positive().nullable()
         }),
+        // O que a rota vai devolver na resposta
         response: {
           201: z.object({
             eventId: z.string().uuid()

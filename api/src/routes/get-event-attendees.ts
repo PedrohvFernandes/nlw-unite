@@ -12,6 +12,8 @@ export async function getEventAttendees(app: FastifyInstance) {
     '/events/:eventId/attendees',
     {
       schema: {
+        summary: 'Get event attendees',
+        tags: ['events Get'],
         params: z.object({
           eventId: z.string().uuid()
         }),

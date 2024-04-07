@@ -22,9 +22,26 @@ import {
 
 // attendee --> Participante de um evento
 export function AttendeeList() {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(() => {
+    const url = new URL(window.location.toString())
+
+    if (url.searchParams.has('search')) {
+      // ?? --> Colocamos isso porque na url pode ter: search= ou seja vazio
+      return url.searchParams.get('search') ?? ''
+    }
+
+    return ''
+  })
   // Estado para controlar a página atual da paginação.
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(() => {
+    const url = new URL(window.location.toString())
+
+    if (url.searchParams.has('page')) {
+      return Number(url.searchParams.get('page'))
+    }
+
+    return 1
+  })
 
   const [totalAttendees, setTotalAttendees] = useState(0)
   const [attendees, setAttendees] = useState<Attendee[]>([])
@@ -59,10 +76,34 @@ export function AttendeeList() {
     })
   }, [page, search])
 
+  // Essa função faz com que o search persiste na busca url state quanto no estado do React
+  function setCurrentSearch(search: string) {
+    const url = new URL(window.location.toString())
+
+    url.searchParams.set('search', String(search))
+
+    window.history.pushState({}, '', url)
+
+    setSearch(search)
+  }
+
+  // Essa função faz com que o page persiste na busca url state quanto no estado do React
+  function setCurrentPage(page: number) {
+    // O to string http://localhost:5173/participante
+    const url = new URL(window.location.toString())
+
+    url.searchParams.set('page', String(page))
+
+    // Api de historico(History) do navegador. A diferença da pushState da location no browser é que ele não recarrega(redirecionamento) a pagina, ele só muda a URL, mas não recarrega a pagina.
+    window.history.pushState({}, '', url)
+
+    setPage(page)
+  }
+
   function onSearchInputChanged(event: ChangeEvent<HTMLInputElement>) {
-    setSearch(event.target.value)
+    setCurrentSearch(event.target.value)
     // Sempre que fazemos um filtro é legal voltar para a primeira pagina, porque meio que é uma nova lista
-    setPage(1)
+    goToFirstPage()
   }
 
   function goToNextPage() {
@@ -72,26 +113,46 @@ export function AttendeeList() {
     //   return
     // }
     // page + 1 --> Vai para a próxima pagina
-    setPage(page + 1)
+    // setPage(page + 1)
+    // Usando url state, em vez de usar somente o estado local do React(useState) para gerenciar a paginação. Usando o URLSearchParams para manipular a query string da URL. Ela retorna e insere os valores da query string da URL. Lembrando que ela começa vazia. Um grande problema dessa Api é que ela leva o usuario para outra URL, ou seja, ele recarrega a pagina.
+    /*
+      const searchParams = new URLSearchParams(window.location.search)
+
+      Inserindo. Ex como fica:
+        {
+          page: 1,
+          query: 'Anna'
+        }
+      searchParams.set('page', String(page + 1))
+
+      // Ex: `?=page=1&query=Anna`
+      window.location.search = searchParams.toString()
+
+    */
+    // Com isso iremos usar outra API
+    setCurrentPage(page + 1)
   }
 
   function goToPreviousPage() {
     // Se a pagina atual for menor ou igual a 1, logo não tem como voltar para uma pagina anterior, então não faz nada
-    if (page <= 1) {
-      return
-    }
+    // if (page <= 1) {
+    //   return
+    // }
     // page - 1 --> Vai para a pagina anterior
-    setPage(page - 1)
+    // setPage(page - 1)
+    setCurrentPage(page - 1)
   }
 
   function goToLastPage() {
     // Vai para a ultima pagina, ou seja, o tamanho do array dividido por 10, que é a quantidade de itens por pagina
-    setPage(TOTAL_PAGE)
+    // setPage(TOTAL_PAGE)
+    setCurrentPage(TOTAL_PAGE)
   }
 
   function goToFirstPage() {
     // Vai para a primeira pagina, ou seja, a pagina 1
-    setPage(1)
+    // setPage(1)
+    setCurrentPage(1)
   }
 
   return (
@@ -110,6 +171,7 @@ export function AttendeeList() {
         */}
           <input
             onChange={onSearchInputChanged}
+            value={search}
             className="bg-transparent flex-1 outline-none border-0 p-0 text-sm focus:ring-0"
             placeholder="Buscar participantes..."
           />

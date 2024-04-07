@@ -12,7 +12,8 @@ import {
 import {
   serializerCompiler,
   validatorCompiler,
-  jsonSchemaTransform
+  jsonSchemaTransform,
+  ZodTypeProvider
 } from 'fastify-type-provider-zod'
 
 // Segurança da Api
@@ -22,7 +23,7 @@ import fastifySwagger from '@fastify/swagger'
 import fastifySwaggerUI from '@fastify/swagger-ui'
 import fastify from 'fastify'
 
-const app = fastify()
+const app = fastify().withTypeProvider<ZodTypeProvider>()
 
 app.register(fastifyCors, {
   origin: '*' // http://meufrontend.com em produção
@@ -46,11 +47,7 @@ app.register(fastifySwagger, {
 })
 
 app.register(fastifySwaggerUI, {
-  routePrefix: '/docs',
-  swagger: {
-    url: '/swagger.json'
-  },
-  exposeRoute: true
+  routePrefix: '/docs'
 })
 
 app.setValidatorCompiler(validatorCompiler)

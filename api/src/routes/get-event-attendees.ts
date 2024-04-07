@@ -105,9 +105,18 @@ export async function getEventAttendees(app: FastifyInstance) {
           where: query
             ? {
                 eventId,
-                name: {
-                  contains: query
-                }
+                OR: [
+                  {
+                    name: {
+                      contains: query
+                    }
+                  },
+                  {
+                    email: {
+                      contains: query
+                    }
+                  }
+                ]
               }
             : {
                 eventId

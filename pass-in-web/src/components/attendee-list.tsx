@@ -1,7 +1,10 @@
-import { ChangeEvent, useState } from 'react'
+/* eslint-disable multiline-ternary */
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { formatDate, formatDateDayjs } from '../hooks/format-date'
-import { attendees } from '../mock-data/attendees'
+// Mock de attendee
+// import { attendees } from '../mock-data/attendees'
+import { Attendee } from '../types/attendee'
 import { IconButton } from './icon-button'
 import { Table } from './table/table'
 import { TableCell } from './table/table-cell'
@@ -23,22 +26,51 @@ export function AttendeeList() {
   // Estado para controlar a página atual da paginação.
   const [page, setPage] = useState(1)
 
+  const [totalAttendees, setTotalAttendees] = useState(0)
+  const [attendees, setAttendees] = useState<Attendee[]>([])
+
   /*
     Para calcular o total pegamos o tamanho do array e dividimos por 10, pois queremos mostrar 10 itens por pagina, logo se tivermos 200 itens, teremos 20 paginas, pois 200/10 = 20
 
     como podemos ter um numero quebrado tipo 212/10 = 21.2, que seria 2 itens em uma pagina só, para arredondar para cima usamos o Math.ceil(attendees.length/10), que arredonda para cima, logo 21.2 = 22, ou seja, estamos na pagina 22 com 2 itens
   */
-  const TOTAL_PAGE = Math.ceil(attendees.length / 10)
+  // const TOTAL_PAGE = Math.ceil(attendees.length / 10)
+
+  // Como antes estavamos usando um mock de dados,tinhamos o tamanho total do array de participantes usando somente o length, mas agora  estamos usando a api que nos retorna em forma de paginação e o total de participantes.
+  const TOTAL_PAGE = Math.ceil(totalAttendees / 10)
+
+  useEffect(() => {
+    const url = new URL(
+      'http://localhost:3000/events/fc95a965-e492-4571-80e1-d461e23d507a/attendees'
+    )
+
+    // Lembrando que a nossa api esta com sistema de paginação
+    // Não colocamos index 0 direto aqui do lado do front porque para o usuario final não faz sentido a lista começar do 0, mas toda lista(array) começa do 0, por isso page - 1, porque aqui no front deixamos o estado page 1 como inicio para questões da experiencia do usuario
+    // `'http://localhost:3000/events/fc95a965-e492-4571-80e1-d461e23d507a/attendees?pageIndex=${page - 1}&query=${search}`
+    url.searchParams.set('pageIndex', String(page - 1))
+    if (search.length > 0) {
+      url.searchParams.set('query', search)
+    }
+
+    fetch(url).then(async (response) => {
+      const data = await response.json()
+      setAttendees(data.attendees)
+      setTotalAttendees(data.totalAttendees)
+    })
+  }, [page, search])
 
   function onSearchInputChanged(event: ChangeEvent<HTMLInputElement>) {
     setSearch(event.target.value)
+    // Sempre que fazemos um filtro é legal voltar para a primeira pagina, porque meio que é uma nova lista
+    setPage(1)
   }
 
   function goToNextPage() {
     // Se a pagina atual * 10 for maior ou igual ao tamanho do array, logo não tem mais itens para mostrar, então não faz nada
-    if (page * 10 >= attendees.length) {
-      return
-    }
+    // if (page * 10 >= attendees.length) {
+    // if (page * 10 >= TOTAL_PAGE) {
+    //   return
+    // }
     // page + 1 --> Vai para a próxima pagina
     setPage(page + 1)
   }
@@ -78,7 +110,7 @@ export function AttendeeList() {
         */}
           <input
             onChange={onSearchInputChanged}
-            className="bg-transparent flex-1 outline-none border-0 p-0 text-sm"
+            className="bg-transparent flex-1 outline-none border-0 p-0 text-sm focus:ring-0"
             placeholder="Buscar participantes..."
           />
         </div>
@@ -121,8 +153,15 @@ export function AttendeeList() {
               Então se estou na primeira pagina que é 1, ele vai fazer 1 - 1 = 0 * 10 = 0 ate 1 * 10 = 10, ou seja, 0 ate 10, que é a primeira pagina
 
               se page for 2, ele vai fazer 2 - 1 = 1 * 10 = 10 ate 2 * 10 = 20, ou seja, 10 ate 20, que é a segunda pagina...
+
+              Nada otimizado fazer dessa forma, porque mesmo que estamos fazendo um suposto de sistema de paginação aqui no front, quando usarmos uma api real e nela não tiver o sistema de paginação iremos carregar toda a lista, logo, isso não é nada otimizado
             */
-            attendees.slice((page - 1) * 10, page * 10).map((attendee) => {
+            // attendees.slice((page - 1) * 10, page * 10).map((attendee) => {
+
+            /*
+              Como agora estamos usando a lista verdadeira vindo da API e ela ja possui o sistema de paginação, basta fazer so o .map
+            */
+            attendees.map((attendee) => {
               return (
                 <TableRow key={attendee.id}>
                   <TableCell>
@@ -150,7 +189,20 @@ export function AttendeeList() {
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>{formatDateDayjs(attendee.checkedInAt)}</TableCell>
+                  <TableCell>
+                    {attendee.checkedInAt ? (
+                      <div className="flex flex-col gap-2">
+                        <span className="text-white">
+                          {formatDate(attendee.checkedInAt)}
+                        </span>
+                        <span className="text-gray-400 text-sm">
+                          {formatDateDayjs(attendee.checkedInAt)}
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-zinc-400">Não fez check-in</span>
+                    )}
+                  </TableCell>
                   <TableCell>
                     <IconButton transparent>
                       <MoreHorizontal className="size-4" />
@@ -167,7 +219,8 @@ export function AttendeeList() {
               colSpan --> Quantas colunas ele vai ocupar
             */}
             <TableCell colSpan={3}>
-              Mostrando 10 de {attendees.length} itens
+              {/* Mostrando 10 de {attendees.length} itens */}
+              Mostrando {attendees.length} de {totalAttendees} itens
             </TableCell>
             <TableCell className="text-right" colSpan={3}>
               {/*

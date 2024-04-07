@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 
 async function seed() {
   // https://www.uuidgenerator.net
-  const eventId = faker.string.uuid() // ex: '9e9bd979-9d10-4915-b339-3786b1634f33'
+  const eventId = faker.string.uuid() // ex: '9e9bd979-9d10-4915-b339-3786b1634f33' pode deixa fixo caso deseje
 
   await prisma.event.deleteMany()
 

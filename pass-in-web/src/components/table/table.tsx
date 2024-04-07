@@ -1,11 +1,11 @@
-import { ComponentProps } from "react";
+import { ComponentProps } from 'react'
 
 interface TableProps extends ComponentProps<'table'> {}
 
-export function Table({...rest}: TableProps) {
+export function Table({ ...rest }: TableProps) {
   return (
     <div className="border border-white/10 rounded-lg">
-     <table {...rest} className="w-full" />
+      <table {...rest} className="w-full" />
     </div>
   )
 }

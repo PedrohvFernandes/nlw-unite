@@ -1,11 +1,15 @@
-import { ComponentProps } from "react";
-import { twMerge } from "tailwind-merge";
+import { ComponentProps } from 'react'
+
+import { twMerge } from 'tailwind-merge'
 
 interface IconButtonProps extends ComponentProps<'button'> {
-  transparent?: boolean;
+  transparent?: boolean
 }
 
-export function IconButton({ transparent, ...rest }: Readonly<IconButtonProps>) {
+export function IconButton({
+  transparent,
+  ...rest
+}: Readonly<IconButtonProps>) {
   return (
     // Cinco formas de passar o children para o button:
 
@@ -16,15 +20,15 @@ export function IconButton({ transparent, ...rest }: Readonly<IconButtonProps>) 
     <button
       {...rest}
       // className={
-      //   `border border-white/10 rounded-md px-1.5 p-1.5 
-      //   ${transparent 
-      //     ? "bg-black/20" 
+      //   `border border-white/10 rounded-md px-1.5 p-1.5
+      //   ${transparent
+      //     ? "bg-black/20"
       //     : "bg-white/20"
       //    }`
       // }
       className={twMerge(
-        "border border-white/10 rounded-md px-1.5 p-1.5",
-        transparent ? "bg-black/20" : "bg-white/20",
+        'border border-white/10 rounded-md px-1.5 p-1.5',
+        transparent ? 'bg-black/20' : 'bg-white/20',
         rest.disabled ? 'opacity-50' : null
       )}
     />

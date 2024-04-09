@@ -58,7 +58,7 @@ export function AttendeeList() {
 
   useEffect(() => {
     const url = new URL(
-      'http://localhost:3000/events/fc95a965-e492-4571-80e1-d461e23d507a/attendees'
+      'http://localhost:3000/events/9e9bd979-9d10-4915-b339-3786b1634f33/attendees'
     )
 
     // Lembrando que a nossa api esta com sistema de paginação

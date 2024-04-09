@@ -91,6 +91,11 @@ npm run db:migrate
 npx prisma studio
 # ou
 npm run db:studio
+
+# Para gerar o prisma client apos a instalar a dependência do prisma
+npx prisma generate
+# ou
+npm run db:generate
 ```
 
 ### Comando do node para ler .env(Variaveis de ambiente)
@@ -181,3 +186,58 @@ depois rode o comando para popular o banco:
     "start": "node dist/server.mjs"
   }
 ```
+- Devops
+  - O docker hub nada mais é que um repositorio de imagens docker, onde podemos subir nossas imagens para serem usadas em qualquer lugar
+  - [Imagens Docker](https://hub.docker.com/)
+  - [Imagens Docker node](https://hub.docker.com/_/node)
+  - [Imagem docker node 20](https://hub.docker.com/_/node/tags?page=&page_size=&ordering=&name=20)
+  - [Imagem docker node 20-alpine3.19](https://hub.docker.com/_/node/tags?page=&page_size=&ordering=&name=20-alpine3.19)
+  - [Para baixar o docker no windows](https://docs.docker.com/desktop/windows/install/)
+  - [Lembre de ter o WSL2 instalado](https://docs.microsoft.com/pt-br/windows/wsl/install)
+  - [Como instalar o WSL2 no Windows 10/11 - Linux e Windows Lado a Lado para Iniciantes](https://www.youtube.com/watch?v=qlLcnSvG1rA)
+  - Após instalar tudo basta iniciar, que qualquer comando via CLI do windows será executado
+  - Para baixar a imagem do docker do node da tag 20: ```docker pull node:20``` pode demorar um pouco
+    - Retorno após baixar a imagem:
+      ```bash
+        0: Pulling from library/node
+        71215d55680c: Pull complete
+        3cb8f9c23302: Pull complete
+        5f899db30843: Pull complete
+        567db630df8d: Pull complete
+        f4ac4e9f5ffb: Pull complete
+        eecc94e1c146: Pull complete
+        5bbcc6307f26: Pull complete
+        18e47472a9da: Pull complete
+        Digest: sha256:8a03de2385cb16c4d76aac30bf86ab05f55f1754a5402dc9039916e8043f019a
+        Status: Downloaded newer image for node:20
+        docker.io/library/node:20
+      ```
+    - Rode um ```docker image ls``` para ver as imagens baixadas no seu sistema
+      - Retorno do meu:
+        ```bash
+            REPOSITORY           TAG       IMAGE ID       CREATED        SIZE
+            node                 20        8e022d47db62   4 days ago     1.1GB
+            bitnami/postgresql   latest    9b84f4e4d643   2 months ago   274MB
+            bitnami/redis        latest    45de196aef7e   2 months ago   95.2MB
+        ```
+  - Para baixar a imagem do docker do node da tag 20-alpine3.19: ```docker pull node:20-alpine3.19``` pode demorar um pouco
+    - Retorno após baixar a imagem:
+      ```bash
+          20-alpine3.19: Pulling from library/node
+          4abcf2066143: Pull complete
+          77152dc4dbd8: Pull complete
+          f90945061f81: Pull complete
+          c95f6f65e1db: Pull complete
+          Digest: sha256:7e227295e96f5b00aa79555ae166f50610940d888fc2e321cf36304cbd17d7d6
+          Status: Downloaded newer image for node:20-alpine3.19
+          docker.io/library/node:20-alpine3.19
+      ```
+    - Rode um ```docker image ls``` para ver as imagens baixadas no seu sistema
+      - Retorno do meu:
+        ```bash
+            REPOSITORY           TAG             IMAGE ID       CREATED        SIZE
+            node                 20              8e022d47db62   4 days ago     1.1GB
+            node                 20-alpine3.19   bc27e8ab8b21   4 days ago     135MB
+            bitnami/postgresql   latest          9b84f4e4d643   2 months ago   274MB
+            bitnami/redis        latest          45de196aef7e   2 months ago   95.2MB
+        ```

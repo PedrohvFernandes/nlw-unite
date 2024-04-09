@@ -1,3 +1,4 @@
+import { basesConfig } from './config'
 import { errorHandler } from './error-handler'
 import {
   checkIn,
@@ -65,10 +66,12 @@ app.setErrorHandler(errorHandler)
 
 app
   .listen({
-    port: 3000,
+    port: basesConfig.nlwunite.baseUrl.port as number,
     // Para conseguir acessar a api por exemplo no react-native
     host: '0.0.0.0'
   })
   .then(() => {
-    console.log('Server is running on port 3000')
+    console.log(
+      `Server is running on ${basesConfig.nlwunite.baseUrl.api_base_url}`
+    )
   })

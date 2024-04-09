@@ -1,5 +1,5 @@
 import { prisma } from '../lib'
-import { generateSlug } from '../utils/generate-slug'
+import { generateSlug } from '../utils'
 import { BadRequest } from './_errors/bad-request'
 
 import { ZodTypeProvider } from 'fastify-type-provider-zod'
